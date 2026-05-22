@@ -1,28 +1,28 @@
 extends CharacterBody3D
 
-# ─── Movement constants ────────────────────────────────────────────────
-const MAX_SPEED          := 14.0
-const ACCELERATION       := 18.0
-const FRICTION           := 22.0
-const TURN_FRICTION      := 28.0
-const AIR_ACCELERATION   := 9.0
-const AIR_FRICTION       := 4.0
+##Movement constants
+const MAX_SPEED := 14.0
+const ACCELERATION := 18.0
+const FRICTION := 22.0
+const TURN_FRICTION := 28.0
+const AIR_ACCELERATION := 9.0
+const AIR_FRICTION := 4.0
 
-# ─── Jump constants ────────────────────────────────────────────────────
-const JUMP_VELOCITY      := 10.0
-const RISE_GRAVITY       := 15.0
-const FALL_GRAVITY       := 32.0
-const MAX_FALL_SPEED     := 30.0
-const JUMP_CUT_MULT      := 0.45
+##Jump constants
+const JUMP_VELOCITY := 10.0
+const RISE_GRAVITY  := 15.0
+const FALL_GRAVITY := 32.0
+const MAX_FALL_SPEED := 30.0
+const JUMP_CUT_MULT := 0.45
 
-# ─── Forgiveness windows ───────────────────────────────────────────────
-const COYOTE_TIME        := 0.10   # seconds after walking off edge
-const JUMP_BUFFER_TIME   := 0.12   # seconds before landing to pre-queue jump
+##Forgiveness windows
+const COYOTE_TIME := 0.10   # seconds after walking off edge
+const JUMP_BUFFER_TIME := 0.12   # seconds before landing to pre-queue jump
 
-# ─── Internal state ───────────────────────────────────────────────────
-var coyote_timer         := 0.0
-var jump_buffer_timer    := 0.0
-var was_on_floor         := false
+##Internal state 
+var coyote_timer := 0.0
+var jump_buffer_timer := 0.0
+var was_on_floor := false
 
 # Reference set by camera.gd so movement is relative to camera facing
 var camera_pivot: Node3D = null
@@ -53,7 +53,7 @@ func respawn():
 	
 
 
-# ─── Timers ────────────────────────────────────────────────────────────
+##timer
 
 func _update_timers(delta: float) -> void:
 	# Coyote: start counting when we leave the floor
@@ -71,7 +71,7 @@ func _update_timers(delta: float) -> void:
 	jump_buffer_timer -= delta
 
 
-# ─── Gravity ───────────────────────────────────────────────────────────
+##Gravity
 
 func _apply_gravity(delta: float) -> void:
 	if is_on_floor():
@@ -82,7 +82,7 @@ func _apply_gravity(delta: float) -> void:
 	velocity.y = max(velocity.y, -MAX_FALL_SPEED)
 
 
-# ─── Jump ──────────────────────────────────────────────────────────────
+##Jump
 
 func _handle_jump() -> void:
 	var can_jump := coyote_timer > 0.0
@@ -93,12 +93,12 @@ func _handle_jump() -> void:
 		coyote_timer = 0.0       # consume both windows
 		jump_buffer_timer = 0.0
 
-	# Variable height: cut upward velocity on early release
+	# varaible jump height
 	if Input.is_action_just_released("jump") and velocity.y > 0.0:
 		velocity.y *= JUMP_CUT_MULT
 
 
-# ─── Horizontal movement ───────────────────────────────────────────────
+##Horizontal movement
 
 func _handle_movement(delta: float) -> void:
 	var raw_input := Input.get_vector("move_left", "move_right", "move_forward", "move_back")
@@ -145,7 +145,7 @@ func _handle_movement(delta: float) -> void:
 			$MeshInstance3D.global_transform.basis.slerp(target_basis, 12.0 * delta)
 
 
-# ─── Post-move bookkeeping ─────────────────────────────────────────────
+##Post move bookkeeping
 
 func _post_move_state() -> void:
 	was_on_floor = is_on_floor()
