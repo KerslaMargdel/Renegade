@@ -3,6 +3,8 @@
 [ext_resource type="Script" uid="uid://mr814nj6s58s" path="res://player.gd" id="1_fj7yv"]
 [ext_resource type="Script" uid="uid://b3bqtju7imfyq" path="res://TestLevel.gd" id="1_tlwt5"]
 [ext_resource type="Script" uid="uid://c7jxw6sssx3c7" path="res://camera.gd" id="2_tlwt5"]
+[ext_resource type="Script" uid="uid://b1x3na1wlumw6" path="res://BlobShadow.gd" id="4_036b0"]
+[ext_resource type="Script" uid="uid://blprqqp7nnpr2" path="res://DirectionalLight.gd" id="4_aqk2v"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_aqk2v"]
 radius = 0.345
@@ -16,8 +18,23 @@ material = SubResource("StandardMaterial3D_tlwt5")
 radius = 0.35
 height = 1.8
 
+[sub_resource type="QuadMesh" id="QuadMesh_dwbse"]
+size = Vector2(0.8, 0.8)
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_036b0"]
+sky_top_color = Color(0.52958083, 0.36659637, 0.7450447, 1)
+sky_horizon_color = Color(0.8653113, 0.58563316, 0.29294097, 1)
+ground_bottom_color = Color(0.47843137, 0.43529412, 0.96862745, 1)
+ground_horizon_color = Color(0.80535185, 0.6083434, 0.45308632, 1)
+
+[sub_resource type="Sky" id="Sky_dwbse"]
+sky_material = SubResource("ProceduralSkyMaterial_036b0")
+
 [sub_resource type="Environment" id="Environment_aqk2v"]
 background_mode = 2
+sky = SubResource("Sky_dwbse")
+ambient_light_source = 3
+ambient_light_color = Color(0.65485364, 0.47840542, 0.22366336, 1)
 
 [node name="World" type="Node3D" unique_id=1456020394]
 
@@ -41,8 +58,15 @@ script = ExtResource("2_tlwt5")
 
 [node name="Camera3D" type="Camera3D" parent="Player/CameraPivot/SpringArm3D" unique_id=1591904484]
 
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=2096955718]
-transform = Transform3D(1, 0, 0, 0, 0.70710677, 0.70710677, 0, -0.70710677, 0.70710677, 0, 0, 0)
+[node name="BlobShadow" type="MeshInstance3D" parent="Player" unique_id=1695502065]
+mesh = SubResource("QuadMesh_dwbse")
+script = ExtResource("4_036b0")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=903362285]
 environment = SubResource("Environment_aqk2v")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=2096955718]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 100, 0)
+shadow_enabled = true
+directional_shadow_mode = 0
+script = ExtResource("4_aqk2v")

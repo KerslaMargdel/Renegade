@@ -1,12 +1,12 @@
 extends CharacterBody3D
 
 ##Movement constants
-const MAX_SPEED := 14.0
-const ACCELERATION := 18.0
-const FRICTION := 22.0
-const TURN_FRICTION := 28.0
-const AIR_ACCELERATION := 9.0
-const AIR_FRICTION := 4.0
+const MAX_SPEED := 18.0
+const ACCELERATION := 8.0
+const FRICTION := 8.0
+const TURN_FRICTION := 8.0
+const AIR_ACCELERATION := 2.0
+const AIR_FRICTION := 6.0
 
 ##Jump constants
 const JUMP_VELOCITY := 10.0
@@ -31,6 +31,7 @@ var spawn_point: Vector3
 func _ready() -> void:
 	camera_pivot = get_node("CameraPivot")
 	spawn_point = global_position
+	add_to_group("player") 
 
 func _physics_process(delta: float) -> void:
 	_update_timers(delta)

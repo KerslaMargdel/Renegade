@@ -13,17 +13,17 @@ var pitch := deg_to_rad(-20.0) #vertical angle stored on spring arm
 
 func _ready() -> void: 
 	pivot = get_parent()
-	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
+	#Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	spring_length = 5.0
 	margin = COLLISION_MARGIN
 
 func _unhandled_input(event: InputEvent) -> void:
 	#Mouse look
-	if event is InputEventMouseMotion:
-		yaw -= event.relative.x * MOUSE_SENSITIVITY
-		pitch -= event.relative.y * MOUSE_SENSITIVITY
-		_apply_rotation()
-	
+	#if event is InputEventMouseMotion:
+		#yaw -= event.relative.x * MOUSE_SENSITIVITY
+		#pitch -= event.relative.y * MOUSE_SENSITIVITY
+		#_apply_rotation()
+	#
 	#toggle mouse capture with escape
 	if event.is_action_pressed("ui_cancel"):
 		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE

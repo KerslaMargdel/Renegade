@@ -4,7 +4,8 @@ extends Node3D
 # Laid out as a linear gauntlet testing one mechanic per section
 const PLATFORMS := [
 	# ── Ground: acceleration / friction run ──────────────────────────
-	[Vector3(  0,  -1,   0), Vector3(20, 1, 6)],   # start pad
+	[Vector3(  0,  -1,   0), Vector3(60, 1, 60)],   # start pad
+	[Vector3(-20, 1.5, 0),  Vector3(10, 1, 6)],
 
 	# ── Flat gap series: comfortable → punishing ─────────────────────
 	[Vector3( 24,  -1,   0), Vector3( 5, 1, 5)],
@@ -41,13 +42,28 @@ func _ready() -> void:
 
 
 func _make_platform(pos: Vector3, size: Vector3) -> void:
-	var box       := CSGBox3D.new()
-	box.size      = size
-	box.position  = pos
+	var box := CSGBox3D.new()
+	box.size = size
+	box.position = pos
 	box.use_collision = true
 	# Alternate two muted colours so platforms read clearly
-	var mat       := StandardMaterial3D.new()
+	var mat := StandardMaterial3D.new()
 	mat.albedo_color = Color(0.55, 0.55, 0.60) if int(pos.x) % 20 < 10 \
 		else Color(0.42, 0.50, 0.58)
 	box.material_override  = mat
 	add_child(box)
+	_add_outline(box, size)
+
+func _add_outline(parent: CSGBox3D, size: Vector3) -> void:
+	var outline := CSGBox3D.new()
+	outline.size = size + Vector3(0.04, 0.04, 0.04)
+	outline.position = Vector3.ZERO
+	outline.use_collision = false
+
+	var mat := StandardMaterial3D.new()
+	mat.albedo_color = Color(0.15, 0.15, 0.18)
+	mat.cull_mode = BaseMaterial3D.CULL_FRONT   # render inside faces only
+	mat.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	outline.material_override = mat
+
+	parent.add_child(outline)
